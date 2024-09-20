@@ -1,0 +1,26 @@
+name: Upload Metadata to API
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Send metadata to API
+        run: |
+          curl -X POST https://internal-developer-platform-demo.edanliu.workers.dev/metadata \
+          -H "Content-Type: application/json" \
+          -d '{
+            "workflowName": "${{ github.workflow }}",
+            "status": "success",
+            "jobId": "${{ github.job }}",
+            "runId": "${{ github.run_id }}",
+            "repository": "${{ github.repository }}"
+          }'
