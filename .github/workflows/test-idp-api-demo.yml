@@ -12,6 +12,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        # 读取.env 内容
+      - name: Load environment variables
+        run: |
+          if [ -f .env ]; then
+            export $(cat .env | xargs)
+          fi
+
+        # 打印环境
+      - name: Print environment variables
+        run: |
+          echo "API Token: $API_TOKEN"
+          echo "Environment: $ENVIRONMENT"      
 
       - name: Send metadata to API
         run: |
@@ -23,4 +35,6 @@ jobs:
             "jobId": "${{ github.job }}",
             "runId": "${{ github.run_id }}",
             "repository": "${{ github.repository }}"
+            "apiToken": "'"$API_TOKEN"'",
+            "environment": "'"$ENVIRONMENT"'"
           }'
