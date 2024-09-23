@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: 加载环境变量
+      - name: Load environment variables
         run: |
           echo "当前目录: $(pwd)"  # 查看当前目录
           ls -al                  # 列出文件
@@ -28,12 +28,12 @@ jobs:
             echo ".env 文件未找到！"
           fi
 
-      - name: 打印环境变量
+      - name: Print environment variables
         run: |
           echo "API Token: $API_TOKEN"
           echo "Environment: $ENVIRONMENT"
 
-      - name: 发送元数据到 API
+      - name: Send metadata to API
         run: |
           curl -X POST https://internal-developer-platform-demo.edanliu.workers.dev/metadata \
           -H "Content-Type: application/json" \
