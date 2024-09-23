@@ -12,29 +12,37 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        # 读取.env 内容
+
+      # 从根目录加载 .env 文件的步骤
       - name: Load environment variables
         run: |
-          if [ -f .env ]; then
-            export $(cat .env | xargs)
+          echo "Current Directory: $(pwd)"  # 查看当前目录
+          ls -al                            # 列出文件
+          if [ -f ../.env ]; then           # 指定加载根目录中的 .env 文件
+            echo ".env file content:"
+            cat ../.env                     # 输出 .env 文件内容以确保其被找到
+            export $(cat ../.env | xargs)   # 加载 .env 文件中的环境变量
+          else
+            echo ".env file not found!"
           fi
 
-        # 打印环境
+      # 打印环境变量的步骤（用于测试）
       - name: Print environment variables
         run: |
           echo "API Token: $API_TOKEN"
-          echo "Environment: $ENVIRONMENT"      
+          echo "Environment: $ENVIRONMENT"
 
+      # 发送元数据到 API 的步骤
       - name: Send metadata to API
         run: |
           curl -X POST https://internal-developer-platform-demo.edanliu.workers.dev/metadata \
           -H "Content-Type: application/json" \
           -d '{
-            "workflowName": "${{ github.workflow }}",
+            "workflowName": "'"${{ github.workflow }}"'",
             "status": "success",
-            "jobId": "${{ github.job }}",
-            "runId": "${{ github.run_id }}",
-            "repository": "${{ github.repository }}"
+            "jobId": "'"${{ github.job }}"'",
+            "runId": "'"${{ github.run_id }}"'",
+            "repository": "'"${{ github.repository }}"'",
             "apiToken": "'"$API_TOKEN"'",
             "environment": "'"$ENVIRONMENT"'"
           }'
