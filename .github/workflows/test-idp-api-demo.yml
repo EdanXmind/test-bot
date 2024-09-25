@@ -35,8 +35,9 @@ jobs:
 
       - name: Send metadata to API
         run: |
-          curl -X POST https://internal-developer-platform-demo.edanliu.workers.dev/metadata \
+          curl -X POST https://cdp-next-psi.vercel.app/api/v1/metadata \
           -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           -d @- <<EOF
           {
             "workflowName": "${GITHUB_WORKFLOW}",
