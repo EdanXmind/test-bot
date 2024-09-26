@@ -32,13 +32,12 @@ jobs:
         run: |
           echo "API Token: $API_TOKEN"
           echo "Environment: $ENVIRONMENT"
-          echo "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
 
       - name: Send metadata to API
         run: |
           curl -X POST https://cdp-next-psi.vercel.app/api/v1/metadata \
           -H "Content-Type: application/json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
           -d @- <<EOF
           {
             "workflowName": "${GITHUB_WORKFLOW}",
