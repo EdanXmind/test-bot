@@ -42,7 +42,7 @@ jobs:
           {
             "workflowName": "${GITHUB_WORKFLOW}",
             "status": "success",
-            "jobId": "${GITHUB_JOB}",
+            "job": "${GITHUB_JOB}",
             "runId": "${GITHUB_RUN_ID}",
             "repository": "${GITHUB_REPOSITORY}",
             "environment": "${ENVIRONMENT}"
