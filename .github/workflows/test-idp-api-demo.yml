@@ -30,14 +30,14 @@ jobs:
 
       - name: Print environment variables
         run: |
-          echo "API Token: $API_TOKEN"
+          echo "ACTIONS_API_TOKEN: $ACTIONS_API_TOKEN"
           echo "Environment: $ENVIRONMENT"
 
       - name: Send metadata to API
         run: |
           curl -X POST https://cdp-next-psi.vercel.app/api/v1/metadata \
           -H "Content-Type: application/json" \
-          -H "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+          -H "Actions-API-Token: Bearer ${ACTIONS_API_TOKEN}" \
           -d @- <<EOF
           {
             "workflowName": "${GITHUB_WORKFLOW}",
@@ -45,7 +45,6 @@ jobs:
             "jobId": "${GITHUB_JOB}",
             "runId": "${GITHUB_RUN_ID}",
             "repository": "${GITHUB_REPOSITORY}",
-            "apiToken": "${API_TOKEN}",
             "environment": "${ENVIRONMENT}"
           }
           EOF
