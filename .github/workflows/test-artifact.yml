@@ -38,7 +38,6 @@ jobs:
 
       - name: Print environment variables
         run: |
-          echo "ACTIONS_API_TOKEN: $ACTIONS_API_TOKEN"
           echo "Environment: $ENVIRONMENT"
           echo "codebaseCommit: $codebaseCommit"
           echo "repoBranch: $repoBranch"
@@ -53,8 +52,8 @@ jobs:
           -d @- <<EOF
           {
             "name": "$(basename $GITHUB_REPOSITORY)",
-            "version": "${GITHUB_RUN_NUMBER}",
-            "sizeKb": "$(du -sk . | cut -f1)",
+            "version": "",
+            "sizeKb": "",
             "env": "${ENVIRONMENT}",
             "codebaseCommit": "${codebaseCommit}",
             "repoBranch": "${repoBranch}",
