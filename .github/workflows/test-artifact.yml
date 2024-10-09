@@ -54,7 +54,7 @@ jobs:
             "name": "$(basename $GITHUB_REPOSITORY)",
             "version": "",
             "sizeKb": "",
-            "env": "${ENVIRONMENT}",
+            "env": "",
             "codebaseCommit": "${codebaseCommit}",
             "repoBranch": "${repoBranch}",
             "workflowTitle": "${GITHUB_WORKFLOW}",
