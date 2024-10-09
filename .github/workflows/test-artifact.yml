@@ -53,7 +53,7 @@ jobs:
           {
             "name": "$(basename $GITHUB_REPOSITORY)",
             "version": "",
-            "sizeKb": "",
+            "sizeKb": 0,
             "env": "",
             "codebaseCommit": "${codebaseCommit}",
             "repoBranch": "${repoBranch}",
