@@ -14,44 +14,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Load environment variables
-        run: |
-          echo "当前目录: $(pwd)"  # 查看当前目录
-          ls -al                  # 列出文件
-          if [ -f .env ]; then    # 在当前目录查找 .env 文件
-            echo ".env 文件内容:"
-            cat .env              # 输出 .env 文件内容以确保其被找到
-            # 将环境变量加载到 $GITHUB_ENV
-            while IFS= read -r line || [[ -n "$line" ]]; do
-              echo "$line" >> $GITHUB_ENV
-            done < .env
-          else
-            echo ".env 文件未找到！"
-          fi
-
-      - name: Set metadata environment variables
-        run: |
-          echo "codebaseCommit=${GITHUB_SHA}" >> $GITHUB_ENV
-          echo "repoBranch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          echo "githubRepoName=${GITHUB_REPOSITORY}" >> $GITHUB_ENV
-          echo "workflowUrl=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> $GITHUB_ENV
-
       - name: Send metadata to API
         run: |
-          curl -X POST https://cdp-next-test.vercel.app/api/v1/artifacts \
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST https://cdp-next-test.vercel.app/api/v1/artifacts \
           -H "Content-Type: application/json" \
-          -H "Actions-API-Token: Bearer ${ACTIONS_API_TOKEN}" \
+          -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
           {
             "name": "$(basename $GITHUB_REPOSITORY)",
             "version": "",
             "sizeKb": 0,
             "env": "",
-            "codebaseCommit": "${codebaseCommit}",
-            "repoBranch": "${repoBranch}",
+            "codebaseCommit": "${GITHUB_SHA}",
+            "repoBranch": "${GITHUB_REF#refs/heads/}",
             "workflowTitle": "${GITHUB_WORKFLOW}",
-            "workflowUrl": "${workflowUrl}",
-            "githubRepoName": "${githubRepoName}",
+            "workflowUrl": "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}",
+            "githubRepoName": "${GITHUB_REPOSITORY}",
             "tags": {
               "feat_open": true, 
               "priority": 29, 
