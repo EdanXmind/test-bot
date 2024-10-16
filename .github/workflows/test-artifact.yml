@@ -9,26 +9,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      codebaseCommit: ${{ github.sha }}
-      repoBranch: ${{ github.ref_name }}
-      githubRepoName: ${{ github.repository }}
-      workflowUrl: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Load .env variables
-        uses: bkeepers/dotenv@v1
-
-      - name: Print environment variables
+      - name: Load environment variables
         run: |
-          echo "Environment: $ENVIRONMENT"
-          echo "codebaseCommit: $codebaseCommit"
-          echo "repoBranch: $repoBranch"
-          echo "githubRepoName: $githubRepoName"
-          echo "workflowUrl: $workflowUrl"
+          echo "当前目录: $(pwd)"  # 查看当前目录
+          ls -al                  # 列出文件
+          if [ -f .env ]; then    # 在当前目录查找 .env 文件
+            echo ".env 文件内容:"
+            cat .env              # 输出 .env 文件内容以确保其被找到
+            # 将环境变量加载到 $GITHUB_ENV
+            while IFS= read -r line || [[ -n "$line" ]]; do
+              echo "$line" >> $GITHUB_ENV
+            done < .env
+          else
+            echo ".env 文件未找到！"
+          fi
+
+      - name: Set metadata environment variables
+        run: |
+          echo "codebaseCommit=${GITHUB_SHA}" >> $GITHUB_ENV
+          echo "repoBranch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "githubRepoName=${GITHUB_REPOSITORY}" >> $GITHUB_ENV
+          echo "workflowUrl=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> $GITHUB_ENV
 
       - name: Send metadata to API
         run: |
@@ -47,10 +53,10 @@ jobs:
             "workflowUrl": "${workflowUrl}",
             "githubRepoName": "${githubRepoName}",
             "tags": {
-              "feat_open": true,
-              "priority": 29,
-              "pm": "jack",
-              "canary_user": [2, 3, 111, 34],
+              "feat_open": true, 
+              "priority": 29, 
+              "pm": "jack", 
+              "canary_user": [2, 3, 111, 34], 
               "abc:ui:nn": true
             }
           }
