@@ -1,0 +1,20 @@
+name: Test Curl Retry Mechanism
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-retry:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Test curl with retry mechanism
+        run: |
+          echo "Testing curl retry mechanism with an invalid URL..."
+          curl --retry 6 --retry-delay 10 --max-time 10 -v -X POST https://invalid-api-url.com
