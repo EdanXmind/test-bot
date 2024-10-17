@@ -31,7 +31,6 @@ jobs:
             "workflowTitle": "${{ github.workflow }}",
             "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             "workflowRunId": "${{ github.run_id }}",
-            "githubRepoName": "${{ github.repository }}",
-            "tags": {}
+            "githubRepoName": "${{ github.repository }}"
           }
           EOF
