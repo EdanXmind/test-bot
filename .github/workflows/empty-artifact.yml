@@ -1,0 +1,31 @@
+name: Test Artifact Metadata
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Send metadata to API
+        run: |
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST https://cdp-next-test.vercel.app/api/v1/artifacts \
+          -H "Content-Type: application/json" \
+          -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
+          -d @- <<EOF
+          {
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+          }
+          EOF
