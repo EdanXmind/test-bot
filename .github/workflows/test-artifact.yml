@@ -25,6 +25,7 @@ jobs:
             "version": "",
             "sizeKb": 0,
             "env": "",
+            "type":"",
             "codebaseCommit": "${{ github.sha }}",
             "repoBranch": "${{ github.ref_name }}",
             "workflowTitle": "${{ github.workflow }}",
