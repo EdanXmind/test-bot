@@ -21,16 +21,16 @@ jobs:
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
           {
-            "name": "$(basename $GITHUB_REPOSITORY)",
+            "name": "$(basename ${{ github.repository }})",
             "version": "",
             "sizeKb": 0,
             "env": "",
-            "codebaseCommit": "${GITHUB_SHA}",
-            "repoBranch": "${GITHUB_REF#refs/heads/}",
-            "workflowTitle": "${GITHUB_WORKFLOW}",
-            "workflowUrl": "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}",
-            "workflowRunId": "${GITHUB_RUN_ID}",
-            "githubRepoName": "${GITHUB_REPOSITORY}",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
             "tags": {
               "feat_open": true, 
               "priority": 29, 
