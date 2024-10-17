@@ -23,7 +23,6 @@ jobs:
           {
             "name": "",
             "version": "",
-            "sizeKb": 0,
             "env": "",
             "type":"",
             "codebaseCommit": "${{ github.sha }}",
