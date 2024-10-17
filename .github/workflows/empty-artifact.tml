@@ -1,4 +1,4 @@
-name: Upload Artifact Metadata
+name: Test Artifact Metadata
 
 on:
   push:
@@ -21,23 +21,12 @@ jobs:
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
           {
-            "name": "",
-            "version": "",
-            "sizeKb": 0,
-            "env": "",
-            "type":"",
             "codebaseCommit": "${{ github.sha }}",
             "repoBranch": "${{ github.ref_name }}",
             "workflowTitle": "${{ github.workflow }}",
             "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             "workflowRunId": "${{ github.run_id }}",
             "githubRepoName": "${{ github.repository }}",
-            "tags": {
-              "feat_open": true, 
-              "priority": 29, 
-              "pm": "jack", 
-              "canary_user": [2, 3, 111, 34], 
-              "abc:ui:nn": true
-            }
+            "tags": {}
           }
           EOF
