@@ -29,6 +29,7 @@ jobs:
             "repoBranch": "${GITHUB_REF#refs/heads/}",
             "workflowTitle": "${GITHUB_WORKFLOW}",
             "workflowUrl": "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}",
+            "workflowRunId": "${GITHUB_RUN_ID}",
             "githubRepoName": "${GITHUB_REPOSITORY}",
             "tags": {
               "feat_open": true, 
