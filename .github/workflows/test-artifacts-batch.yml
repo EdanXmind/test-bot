@@ -1,0 +1,55 @@
+name: Upload Artifacts
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Send artifact to API
+        run: |
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST https://cdp-next-test.vercel.app/api/v1/artifacts/batch \
+          -H "Content-Type: application/json" \
+          -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
+          -d @- <<EOF
+          [
+            {
+              "name": "artifact1",
+              "version": "1.0.0",
+              "sizeKb": 1024,
+              "env": ["development"],
+              "type": "release",
+              "codebaseCommit": "abc123",
+              "repoBranch": "main",
+              "workflowTitle": "Build",
+              "workflowUrl": "https://example.com/workflow/1",
+              "workflowRunId": "1",
+              "githubRepoName": "repo1",
+              "tags": {"tag1": "value1"},
+              "hash": "hash1"
+            },
+            {
+              "name": "artifact2",
+              "version": "1.0.1",
+              "sizeKb": 2048,
+              "env": ["production"],
+              "type": "release",
+              "codebaseCommit": "def456",
+              "repoBranch": "develop",
+              "workflowTitle": "Test",
+              "workflowUrl": "https://example.com/workflow/2",
+              "workflowRunId": "2",
+              "githubRepoName": "repo2",
+              "tags": {"tag2": "value2"},
+              "hash": "hash2"
+            }
+          ]
+          EOF
