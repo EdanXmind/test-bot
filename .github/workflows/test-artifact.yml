@@ -16,7 +16,7 @@ jobs:
 
       - name: Send metadata to API
         run: |
-          curl --retry 6 --retry-delay 10 --max-time 10 -X POST https://cdp-next-test.vercel.app/api/v1/artifacts \
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/artifacts \
           -H "Content-Type: application/json" \
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
