@@ -22,34 +22,36 @@ jobs:
           -d @- <<EOF
           [
             {
-              "name": "artifact1",
-              "version": "1.0.0",
-              "sizeKb": 1024,
-              "env": ["development"],
-              "type": "release",
-              "codebaseCommit": "abc123",
-              "repoBranch": "main",
-              "workflowTitle": "Build",
-              "workflowUrl": "https://example.com/workflow/1",
-              "workflowRunId": "1",
-              "githubRepoName": "repo1",
-              "tags": {"tag1": "value1"},
-              "hash": "hash1"
+            "name": "test-artifact1",
+            "version": "1.0.0",
+            "sizeKb": 120,
+            "env": ["development", "test"],
+            "type":"yml",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+            "tags": {
+                "feat_open": true
+              }
             },
             {
-              "name": "artifact2",
-              "version": "1.0.1",
-              "sizeKb": 2048,
-              "env": ["production"],
-              "type": "release",
-              "codebaseCommit": "def456",
-              "repoBranch": "develop",
-              "workflowTitle": "Test",
-              "workflowUrl": "https://example.com/workflow/2",
-              "workflowRunId": "2",
-              "githubRepoName": "repo2",
-              "tags": {"tag2": "value2"},
-              "hash": "hash2"
+            "name": "test-artifact2",
+            "version": "1.1.1",
+            "sizeKb": 0,
+            "env": ["development"],
+            "type":"yml",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+            "tags": {
+                "feat_open": true
+              }
             }
           ]
           EOF
