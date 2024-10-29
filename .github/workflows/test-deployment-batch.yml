@@ -1,0 +1,41 @@
+name: Upload Deployment Batch
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Send deployment to API
+        run: |
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/deployments \
+          -H "Content-Type: application/json" \
+          -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
+          -d @- <<EOF
+          [
+            {
+            "artifactName": "test1",
+            "artifactVersion": "1.0.0",
+            "componentName": "test-1-1",
+            "componentType": "yml",
+            "env": ["development", "test"],
+            "workflowRunId": "${{ github.run_id }}"
+            },
+            {
+              "artifactName": "test2",
+              "artifactVersion": "2.0.0",
+              "componentName": "test-2-2",
+              "componentType": "json",
+              "env": ["production"],
+              "workflowRunId": "${{ github.run_id }}"
+            }
+          ]
+          EOF
