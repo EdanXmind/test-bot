@@ -22,7 +22,7 @@ jobs:
           -d @- <<EOF
           [
             {
-            "artifactName": "test1",
+            "artifactName": "test-artifact1",
             "artifactVersion": "1.0.0",
             "componentName": "test-1-1",
             "componentType": "yml",
@@ -30,8 +30,8 @@ jobs:
             "workflowRunId": "${{ github.run_id }}"
             },
             {
-              "artifactName": "test2",
-              "artifactVersion": "2.0.0",
+              "artifactName": "test-artifact2",
+              "artifactVersion": "1.1.1",
               "componentName": "test-2-2",
               "componentType": "json",
               "env": ["production"],
