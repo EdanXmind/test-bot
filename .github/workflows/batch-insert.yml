@@ -1,0 +1,57 @@
+name: Upload Artifact Batch
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Send artifacts to API
+        run: |
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/artifacts/batch \
+          -H "Content-Type: application/json" \
+          -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
+          -d @- <<EOF
+          [
+            {
+            "name": "test-artifact1",
+            "version": "1.0.0",
+            "sizeKb": 120,
+            "env": ["development", "test"],
+            "type":"yml",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+            "tags": {
+                "feat_open": true
+              }
+            },
+            {
+            "name": "test-artifact2",
+            "version": "1.1.0",
+            "sizeKb": 0,
+            "env": ["development"],
+            "type":"yml",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+            "tags": {
+                "feat_open": true
+              }
+            }
+          ]
+          EOF
