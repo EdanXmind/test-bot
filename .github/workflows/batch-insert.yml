@@ -1,4 +1,4 @@
-name: Upload Deployment Batch
+name: Upload Artifact Batch
 
 on:
   push:
@@ -14,28 +14,44 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Send deployment to API
+      - name: Send artifacts to API
         run: |
-          curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/deployments \
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/artifacts/batch \
           -H "Content-Type: application/json" \
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
           [
             {
-            "artifactName": "test1",
-            "artifactVersion": "1.0.0",
-            "componentName": "test-1-1",
-            "componentType": "yml",
+            "name": "test-artifact4",
+            "version": "1.0.0",
+            "sizeKb": 120,
             "env": ["development", "test"],
-            "workflowRunId": "${{ github.run_id }}"
+            "type":"yml",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+            "tags": {
+                "feat_open": true
+              }
             },
             {
-              "artifactName": "test2",
-              "artifactVersion": "2.0.0",
-              "componentName": "test-2-2",
-              "componentType": "json",
-              "env": "production",
-              "workflowRunId": "${{ github.run_id }}"
+            "name": "test-artifact3",
+            "version": "1.1.0",
+            "sizeKb": 0,
+            "env": "development",
+            "type":"yml",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+            "tags": {
+                "feat_open": true
+              }
             }
           ]
           EOF
