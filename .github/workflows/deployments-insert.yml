@@ -1,4 +1,4 @@
-name: Upload Deployment Batch
+name: Upload Artifact
 
 on:
   push:
@@ -14,28 +14,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Send deployment to API
+      - name: Send artifact to API
         run: |
-          curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/deployments \
+          curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/artifacts \
           -H "Content-Type: application/json" \
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
-          [
-            {
-            "artifactName": "test-artifact1",
-            "artifactVersion": "1.0.0",
-            "componentName": "test-1-1",
-            "componentType": "yml",
-            "env": ["development", "test"],
-            "workflowRunId": "${{ github.run_id }}"
-            },
-            {
-              "artifactName": "test-artifact2",
-              "artifactVersion": "1.1.0",
-              "componentName": "test-2-2",
-              "componentType": "json",
-              "env": ["production"],
-              "workflowRunId": "${{ github.run_id }}"
+          {
+            "name": "test-empty",
+            "version": "test-empty",
+            "sizeKb": 0,
+            "env": "",
+            "type":"",
+            "codebaseCommit": "${{ github.sha }}",
+            "repoBranch": "${{ github.ref_name }}",
+            "workflowTitle": "${{ github.workflow }}",
+            "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "workflowRunId": "${{ github.run_id }}",
+            "githubRepoName": "${{ github.repository }}",
+            "tags": {
+              "feat_open": true, 
+              "priority": 29, 
+              "pm": "jack", 
+              "canary_user": [2, 3, 111, 34], 
+              "abc:ui:nn": true
             }
-          ]
+          }
           EOF
