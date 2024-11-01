@@ -21,7 +21,7 @@ jobs:
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
           {
-            "name": "test-insert,
+            "name": "test-insert",
             "version": "test-insert",
             "sizeKb": 0,
             "env": "test",
