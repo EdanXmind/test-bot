@@ -21,11 +21,11 @@ jobs:
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
           {
-            "name": "test-empty",
-            "version": "test-empty",
+            "name": "test-insert,
+            "version": "test-insert",
             "sizeKb": 0,
-            "env": "",
-            "type":"",
+            "env": "test",
+            "type":"yml",
             "codebaseCommit": "${{ github.sha }}",
             "repoBranch": "${{ github.ref_name }}",
             "workflowTitle": "${{ github.workflow }}",
