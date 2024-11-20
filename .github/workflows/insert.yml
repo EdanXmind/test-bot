@@ -1,4 +1,4 @@
-name: Upload Artifact
+name: Upload Artifact Metadata
 
 on:
   push:
@@ -14,29 +14,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Send artifact to API
+      - name: Send metadata to API
         run: |
           curl --retry 6 --retry-delay 10 --max-time 10 -X POST ${{ vars.CDP_SERVER_API_URL }}/api/v1/artifacts \
           -H "Content-Type: application/json" \
           -H "CDP-Actions-API-Token: Bearer ${{ secrets.CDP_ACTIONS_API_TOKEN }}" \
           -d @- <<EOF
           {
-            "name": "",
+            "name": " test the uploadTime is null",
             "version": "",
-            "sizeKb": 0,
             "type":"",
             "codebaseCommit": "${{ github.sha }}",
             "repoBranch": "${{ github.ref_name }}",
             "workflowTitle": "${{ github.workflow }}",
             "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             "workflowRunId": "${{ github.run_id }}",
-            "githubRepoName": "${{ github.repository }}",
-            "tags": {
-              "feat_open": true, 
-              "priority": 29, 
-              "pm": "jack", 
-              "canary_user": [2, 3, 111, 34], 
-              "abc:ui:nn": true
-            }
+            "githubRepoName": "${{ github.repository }}"
           }
           EOF
