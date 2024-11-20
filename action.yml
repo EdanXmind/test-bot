@@ -1,0 +1,53 @@
+name: "Upload Artifact"
+description: "Upload an artifact to a specified API."
+author: "Your Name"
+inputs:
+  cdp_server_api_url:
+    description: "The base URL for the API server"
+    required: true
+  cdp_actions_api_token:
+    description: "The API token for authentication"
+    required: true
+  name:
+    description: "Artifact name"
+    required: true
+  version:
+    description: "Artifact version"
+    required: true
+  size_kb:
+    description: "Size of the artifact in KB"
+    required: true
+  env:
+    description: "Environment for the artifact"
+    required: true
+  type:
+    description: "Artifact type"
+    required: true
+  tags:
+    description: "Custom tags in JSON format"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Upload Artifact
+      shell: bash
+      run: |
+        curl --retry 6 --retry-delay 10 --max-time 10 -X POST "${{ inputs.cdp_server_api_url }}/api/v1/artifacts" \
+        -H "Content-Type: application/json" \
+        -H "CDP-Actions-API-Token: Bearer ${{ inputs.cdp_actions_api_token }}" \
+        -d @- <<EOF
+        {
+          "name": "${{ inputs.name }}",
+          "version": "${{ inputs.version }}",
+          "sizeKb": ${ { inputs.size_kb } },
+          "env": "${{ inputs.env }}",
+          "type": "${{ inputs.type }}",
+          "codebaseCommit": "${{ github.sha }}",
+          "repoBranch": "${{ github.ref_name }}",
+          "workflowTitle": "${{ github.workflow }}",
+          "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          "workflowRunId": "${{ github.run_id }}",
+          "githubRepoName": "${{ github.repository }}",
+          "tags": ${ { inputs.tags || "{}" } }
+        }
+        EOF
