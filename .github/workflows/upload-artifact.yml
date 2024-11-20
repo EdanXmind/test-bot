@@ -1,0 +1,27 @@
+name: Upload Artifact
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Upload Artifact
+        uses: EdanXmind/test-bot@v1 # 指定自定义 Action
+        with:
+          cdp_server_api_url: ${{ vars.CDP_SERVER_API_URL }}
+          cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
+          name: "test-action-artifact"
+          version: "1.0.0"
+          size_kb: 1234
+          env: "production"
+          type: "binary"
+          tags: '{"feat_open": true}'
