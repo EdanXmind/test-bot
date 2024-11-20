@@ -1,6 +1,6 @@
 name: "Upload Artifact"
 description: "Upload an artifact to a specified API."
-author: "Your Name"
+author: "Edan Liu"
 inputs:
   cdp_server_api_url:
     description: "The base URL for the API server"
@@ -11,63 +11,50 @@ inputs:
   name:
     description: "Artifact name"
     required: false
+    default: null
   version:
     description: "Artifact version"
     required: false
+    default: null
   size_kb:
     description: "Size of the artifact in KB"
     required: false
-    default: 0
+    default: "0"
   env:
     description: "Environment for the artifact"
     required: false
-    default: ""
+    default: null
   type:
     description: "Artifact type"
     required: false
-    default: ""
+    default: null
   tags:
     description: "Custom tags in JSON format"
     required: false
+    default: null
+
 runs:
   using: "composite"
   steps:
     - name: Upload Artifact
       shell: bash
       run: |
-        # 设置默认值
-        NAME=${{ inputs.name:-null }}
-        VERSION=${{ inputs.version:-null }}
-        SIZE_KB=${{ inputs.size_kb }}
-        ENV=${{ inputs.env:-null }}
-        TYPE=${{ inputs.type:-null }}
-        TAGS=${{ inputs.tags:-null }}
-
-        # 构造 JSON 数据
-        JSON_BODY=$(jq -n \
-          --argjson name "${NAME}" \
-          --argjson version "${VERSION}" \
-          --arg sizeKb "${SIZE_KB}" \
-          --argjson env "${ENV}" \
-          --argjson type "${TYPE}" \
-          --argjson tags "${TAGS}" \
-          '{
-            name: $name,
-            version: $version,
-            sizeKb: ($sizeKb | tonumber),
-            env: $env,
-            type: $type,
-            codebaseCommit: env.GITHUB_SHA,
-            repoBranch: env.GITHUB_REF_NAME,
-            workflowTitle: env.GITHUB_WORKFLOW,
-            workflowUrl: "\(.env.GITHUB_SERVER_URL)/\(.env.GITHUB_REPOSITORY)/actions/runs/\(.env.GITHUB_RUN_ID)",
-            workflowRunId: env.GITHUB_RUN_ID,
-            githubRepoName: env.GITHUB_REPOSITORY,
-            tags: $tags
-          } | del(.[] | select(.==null))')
-
-        # 执行 curl 请求
         curl --retry 6 --retry-delay 10 --max-time 10 -X POST "${{ inputs.cdp_server_api_url }}/api/v1/artifacts" \
         -H "Content-Type: application/json" \
         -H "CDP-Actions-API-Token: Bearer ${{ inputs.cdp_actions_api_token }}" \
-        -d "${JSON_BODY}"
+        -d @- <<EOF
+        {
+          "name": "${{ inputs.name }}",
+          "version": "${{ inputs.version }}",
+          "sizeKb": ${{ inputs.size_kb }},
+          "env": "${{ inputs.env }}",
+          "type": "${{ inputs.type }}",
+          "codebaseCommit": "${{ github.sha }}",
+          "repoBranch": "${{ github.ref_name }}",
+          "workflowTitle": "${{ github.workflow }}",
+          "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          "workflowRunId": "${{ github.run_id }}",
+          "githubRepoName": "${{ github.repository }}",
+          "tags": ${{ inputs.tags }}
+        }
+        EOF
