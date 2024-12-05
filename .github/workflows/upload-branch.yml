@@ -1,0 +1,37 @@
+name: Upload Deployment Batch
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Send deployment to API
+        uses: EdanXmind/test-bot/deployments@main
+        with:
+          cdp_server_api_url: ${{ secrets.CDP_SERVER_API_URL }}
+          cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
+          deployment_batch_data: |
+            - artifactName: "test-action-artifact-1205"
+              artifactVersion: "1.0.0"
+              componentName: "test-1-1-1205"
+              componentType: "yml"
+              env:
+                - "development"
+                - "test"
+              workflowRunId: "${{ github.run_id }}"
+            - artifactName: "test-action-artifact-1205"
+              artifactVersion: "1.0.0"
+              componentName: "test-2-2-1205"
+              componentType: "json"
+              env:
+                - "production"
+              workflowRunId: "${{ github.run_id }}"

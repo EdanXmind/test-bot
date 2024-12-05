@@ -1,6 +1,5 @@
 name: "Upload Artifact"
 description: "Upload an artifact to a specified API."
-author: "Edan Liu"
 inputs:
   cdp_actions_api_token:
     description: "The API token for authentication"
