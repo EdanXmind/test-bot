@@ -15,13 +15,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Upload Artifact
-        uses: EdanXmind/test-bot@v1 # 指定自定义 Action
+        uses: github.com/EdanXmind/test-bot/upload-artifacts@main # 使用 branch 来引用自定义 Action
         with:
-          cdp_server_api_url: ${{ vars.CDP_SERVER_API_URL }}
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
           name: "test-action-artifact"
           version: "1.0.0"
           size_kb: 1234
-          env: "production"
           type: "binary"
           tags: '{"feat_open": true}'

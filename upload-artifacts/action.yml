@@ -2,9 +2,6 @@ name: "Upload Artifact"
 description: "Upload an artifact to a specified API."
 author: "Edan Liu"
 inputs:
-  cdp_server_api_url:
-    description: "The base URL for the API server"
-    required: true
   cdp_actions_api_token:
     description: "The API token for authentication"
     required: true
@@ -39,7 +36,7 @@ runs:
     - name: Upload Artifact
       shell: bash
       run: |
-        curl --retry 6 --retry-delay 10 --max-time 10 -X POST "${{ inputs.cdp_server_api_url }}/api/v1/artifacts" \
+        curl --retry 6 --retry-delay 10 --max-time 10 -X POST "${{ secrets.CDP_SERVER_API_URL }}/api/v1/artifacts" \
         -H "Content-Type: application/json" \
         -H "CDP-Actions-API-Token: Bearer ${{ inputs.cdp_actions_api_token }}" \
         -d @- <<EOF
