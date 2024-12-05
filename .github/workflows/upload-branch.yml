@@ -17,8 +17,8 @@ jobs:
       - name: Send deployment to API
         uses: EdanXmind/test-bot/deployments@main
         with:
-          cdp_server_api_url: ${{ secrets.CDP_SERVER_API_URL }}
-          cdp_actions_api_token: ${{ vars.CDP_ACTIONS_API_TOKEN }}
+          cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
+          cdp_server_api_url: ${{ vars.CDP_SERVER_API_URL }}
           deployment_batch_data: |
             - artifactName: "test-action-artifact-1205"
               artifactVersion: "1.0.0"
