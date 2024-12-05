@@ -18,7 +18,7 @@ runs:
       shell: bash
       run: |
         # 使用 yq 等工具来解析yaml格式
-        deployment_batch_json=$(echo "${{ inputs.deployment_batch_data }}" | yq eval -j -)
+        deployment_batch_json=$(echo "${{ inputs.deployment_batch_data }}" | yq eval -o=json -)
         curl --retry 6 --retry-delay 10 --max-time 10 -X POST "${{ inputs.cdp_server_api_url }}/api/v1/deployments" \
         -H "Content-Type: application/json" \
         -H "CDP-Actions-API-Token: Bearer ${{ inputs.cdp_actions_api_token }}" \
