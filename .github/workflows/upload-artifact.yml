@@ -18,7 +18,8 @@ jobs:
         uses: EdanXmind/test-bot/upload-artifacts@main # 使用 branch 来引用自定义 Action
         with:
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
-          name: "test-action-artifact"
+          cdp_server_api_url: ${{ secrets.CDP_SERVER_API_URL }}
+          name: "test-action-artifact-1205"
           version: "1.0.0"
           size_kb: 1234
           type: "binary"
