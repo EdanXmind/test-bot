@@ -1,11 +1,11 @@
 name: "Send Deployment to API"
 description: "Send deployment data to a specified API."
 inputs:
-  cdp_server_api_url:
-    description: "The base URL for the API server"
-    required: true
   cdp_actions_api_token:
     description: "The API token for authentication"
+    required: true
+  cdp_server_api_url:
+    description: "The base URL for the API server"
     required: true
   deployment_batch_data:
     description: "The deployment batch data in YAML format"
@@ -19,6 +19,10 @@ runs:
       run: |
         # 使用 yq 等工具来解析yaml格式
         deployment_batch_json=$(echo "${{ inputs.deployment_batch_data }}" | yq eval -o=json -)
+
+        # 将 github.run_id 注入 deployment 数据
+        deployment_batch_json=$(echo "$deployment_batch_json" | jq '.[] |= . + { "workflowRunId": "'${{ github.run_id }}'" }')
+
         curl --retry 6 --retry-delay 10 --max-time 10 -X POST "${{ inputs.cdp_server_api_url }}/api/v1/deployments" \
         -H "Content-Type: application/json" \
         -H "CDP-Actions-API-Token: Bearer ${{ inputs.cdp_actions_api_token }}" \

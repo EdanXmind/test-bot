@@ -15,23 +15,22 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Send deployment to API
-        uses: EdanXmind/test-bot/deployments@main
+        uses: xmindltd/idp-actions/deployments@main
         with:
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
           cdp_server_api_url: ${{ vars.CDP_SERVER_API_URL }}
           deployment_batch_data: |
-            - artifactName: "test-action-artifact-1205"
+            - artifactName: "test-action-artifact"
               artifactVersion: "1.0.0"
-              componentName: "test-1-1-1205"
+              componentName: "test-1-1"
               componentType: "yml"
               env:
                 - "development"
                 - "test"
               workflowRunId: "${{ github.run_id }}"
-            - artifactName: "test-action-artifact-1205"
+            - artifactName: "test-action-artifact"
               artifactVersion: "1.0.0"
-              componentName: "test-2-2-1205"
-              componentType: "json"
+              componentName: "test-2"
+              componentType: "text"
               env:
                 - "production"
-              workflowRunId: "${{ github.run_id }}"
