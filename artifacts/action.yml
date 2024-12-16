@@ -27,7 +27,7 @@ inputs:
   tags:
     description: "Custom tags in JSON format"
     required: false
-    default: '[]'
+    default: null
 
 runs:
   using: "composite"
@@ -51,6 +51,6 @@ runs:
           "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
           "workflowRunId": "${{ github.run_id }}",
           "githubRepoName": "${{ github.repository }}",
-          "tags": ${{ inputs.tags || '[]' }}
+          "tags": ${{ inputs.tags || '{}' }}
         }
         EOF
