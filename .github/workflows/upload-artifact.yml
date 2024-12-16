@@ -18,7 +18,10 @@ jobs:
           name: "s3://xxx/applications/"
           version: "1.1.1"
           type: "s3-uri"
-          tag: [{"feat_open": true}, {"test": "test"}]
+          "tags": [
+            { "feat_open": true },
+            { "test": "test" }
+          ]
 
       - name: Send artifact metadata to CDP
         uses: EdanXmind/test-bot/artifacts@main

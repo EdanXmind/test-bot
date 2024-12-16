@@ -27,7 +27,7 @@ inputs:
   tags:
     description: "Custom tags in JSON format"
     required: false
-    default: null
+    default: '[]'
 
 runs:
   using: "composite"
