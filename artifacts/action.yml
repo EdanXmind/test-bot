@@ -51,6 +51,6 @@ runs:
           "workflowUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
           "workflowRunId": "${{ github.run_id }}",
           "githubRepoName": "${{ github.repository }}",
-          "tags": ${{ inputs.tags != null && inputs.tags != "" && inputs.tags || "[]" }}
+          "tags": ${{ inputs.tags || '[]' }}
         }
         EOF
