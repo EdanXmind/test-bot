@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Send artifact metadata to CDP
-        uses: xmindltd/idp-actions/artifacts@main
+        uses: EdanXmind/test-bot/artifacts@main
         with:
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
           name: "s3://xxx/applications/"
@@ -20,7 +20,7 @@ jobs:
           type: "s3-uri"
 
       - name: Send artifact metadata to CDP
-        uses: xmindltd/idp-actions/artifacts@main
+        uses: EdanXmind/test-bot/artifacts@main
         with:
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
           name: "s3://yyy/applications/"
