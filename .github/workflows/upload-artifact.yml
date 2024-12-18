@@ -41,7 +41,6 @@ jobs:
               env:
                 - "development"
                 - "test"
-              workflowRunId: "${{ github.run_id }}"
             - artifactName: "test-action-artifact"
               artifactVersion: "1.0.0"
               componentName: "test-2"

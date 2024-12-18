@@ -40,5 +40,4 @@ runs:
       env:
         INPUT_DEPLOYMENT_BATCH_DATA: ${{ inputs.deployment_batch_data }}
         INPUT_CDP_ACTIONS_API_TOKEN: ${{ inputs.cdp_actions_api_token }}
-        INPUT_CDP_SERVER_API_URL: ${{ inputs.cdp_server_api_url }}
         GITHUB_RUN_ID: ${{ github.run_id }}
