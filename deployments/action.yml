@@ -1,5 +1,6 @@
-name: "Send the Deployment Metadata to API"
+name: Send the Deployment Metadata to API
 description: "Send deployment data to a specified API."
+
 inputs:
   cdp_actions_api_token:
     description: "The API token for authentication"
@@ -12,18 +13,64 @@ inputs:
     required: true
 
 runs:
-  using: "composite"
+  using: "node12"
   steps:
-    - name: Parse YAML and send deployment to API
-      shell: bash
+    - name: Install dependencies
       run: |
-        # 使用 yq 等工具来解析yaml格式
-        deployment_batch_json=$(echo "${{ inputs.deployment_batch_data }}" | yq eval -o=json -)
+        npm install node-fetch js-yaml
 
-        # 将 github.run_id 注入 deployment 数据
-        deployment_batch_json=$(echo "$deployment_batch_json" | jq '.[] |= . + { "workflowRunId": "'${{ github.run_id }}'" }')
+    - name: Parse YAML and send deployment to API
+      run: |
+        const fetch = require('node-fetch');
+        const yaml = require('js-yaml');
 
-        curl --retry 6 --retry-delay 10 --max-time 10 -X POST "https://cdp-next-test.vercel.app/api/v1/deployments" \
-        -H "Content-Type: application/json" \
-        -H "CDP-Actions-API-Token: Bearer ${{ inputs.cdp_actions_api_token }}" \
-        -d "$deployment_batch_json"
+        const { cdp_actions_api_token, cdp_server_api_url, deployment_batch_data } = process.env;
+
+        async function sendDeploymentData({
+          cdpActionsApiToken,
+          cdpServerApiUrl,
+          deploymentBatchData,
+        }) {
+          try {
+            // Parse the YAML input data into JSON
+            const deploymentBatch = yaml.load(deploymentBatchData);
+
+            // Inject the GitHub run ID into the deployment data
+            deploymentBatch.forEach(deployment => {
+              deployment.workflowRunId = process.env.GITHUB_RUN_ID;
+            });
+
+            // Prepare the payload for the API request
+            const payload = JSON.stringify(deploymentBatch);
+
+            // Set up the headers
+            const headers = {
+              "Content-Type": "application/json",
+              "CDP-Actions-API-Token": `Bearer ${cdpActionsApiToken}`,
+            };
+
+            // Make the API request
+            const response = await fetch(`${cdpServerApiUrl}/api/v1/deployments`, {
+              method: "POST",
+              headers: headers,
+              body: payload,
+            });
+
+            if (!response.ok) {
+              throw new Error(`Failed to send deployment data: ${response.status} ${response.statusText}`);
+            }
+
+            const responseData = await response.json();
+            console.log('Deployment data sent successfully:', responseData);
+
+          } catch (error) {
+            console.error("Error sending deployment data:", error.message);
+            process.exit(1); // Exit with error code to fail the GitHub Actions step
+          }
+        }
+
+        sendDeploymentData({
+          cdpActionsApiToken: '${{ inputs.cdp_actions_api_token }}',
+          cdpServerApiUrl: '${{ inputs.cdp_server_api_url }}',
+          deploymentBatchData: '${{ inputs.deployment_batch_data }}',
+        });
