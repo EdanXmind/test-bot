@@ -25,7 +25,7 @@ async function uploadArtifact({
                               }) {
   const url = 'https://cdp-next-test.vercel.app/api/v1/artifacts';
   const retries = 6;
-  const retryDelay = 10000; // 10 seconds
+  const retryDelay = 10000;
 
   const payload = {
     name,

@@ -27,3 +27,24 @@ jobs:
           name: "s3://yyy/applications/"
           version: "1.0.0"
           type: "s3-uri"
+
+      - name: Send deployment to API
+        uses: EdanXmind/test-bot/deployments@main
+        with:
+          cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
+          cdp_server_api_url: ${{ vars.CDP_SERVER_API_URL }}
+          deployment_batch_data: |
+            - artifactName: "test-action-artifact"
+              artifactVersion: "1.0.0"
+              componentName: "test-1-1"
+              componentType: "yml"
+              env:
+                - "development"
+                - "test"
+              workflowRunId: "${{ github.run_id }}"
+            - artifactName: "test-action-artifact"
+              artifactVersion: "1.0.0"
+              componentName: "test-2"
+              componentType: "text"
+              env:
+                - "production"    
