@@ -1,38 +1,37 @@
-name: Upload Artifact
-
-description: "Send artifact data to a specified API."
+name: 'Upload Artifact'
+description: 'Send artifact data to a specified API.'
 
 inputs:
   cdp_actions_api_token:
-    description: "The API token for authentication"
+    description: 'The API token for authentication'
     required: true
   name:
-    description: "Artifact name"
+    description: 'Artifact name'
     required: false
     default: null
   version:
-    description: "Artifact version"
+    description: 'Artifact version'
     required: false
     default: null
   size_kb:
-    description: "Size of the artifact in KB"
+    description: 'Size of the artifact in KB'
     required: false
-    default: "0"
+    default: '0'
   env:
-    description: "Environment for the artifact"
+    description: 'Environment for the artifact'
     required: false
     default: null
   type:
-    description: "Artifact type"
+    description: 'Artifact type'
     required: false
     default: null
   tags:
-    description: "Custom tags in JSON format"
+    description: 'Custom tags in JSON format'
     required: false
     default: '{}'
 
 runs:
-  using: "node12"
+  using: 'composite'
   steps:
     - name: Upload the Artifact Metadata using JavaScript
       run: |
@@ -113,3 +112,4 @@ runs:
           console.error("Artifact upload failed:", error.message);
           process.exit(1); // Exit with error code
         });
+      shell: bash # Specify shell if not already done in the workflow file
