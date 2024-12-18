@@ -18,19 +18,10 @@ runs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
     - name: Initialize Node.js project and install dependencies
       run: |
         npm init -y
         npm install js-yaml
-      shell: bash
-
-    - name: List files for debugging
-      run: ls -R
       shell: bash
 
     - name: Parse YAML and send deployment to API using JavaScript
