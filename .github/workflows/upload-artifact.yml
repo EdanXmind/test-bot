@@ -15,7 +15,7 @@ jobs:
         uses: EdanXmind/test-bot/artifacts@main
         with:
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
-          name: "s3://xxx/applications/"
+          name: "s3://test1/applications/"
           version: "1.1.1"
           type: "s3-uri"
           tags: '{"feat_open": true, "priority": 29, "pm": "jack", "canary_user": [2, 3, 111, 34], "abc:ui:nn": true}'
@@ -24,7 +24,7 @@ jobs:
         uses: EdanXmind/test-bot/artifacts@main
         with:
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
-          name: "s3://yyy/applications/"
+          name: "s3://test2/applications/"
           version: "1.0.0"
           type: "s3-uri"
 
@@ -34,14 +34,14 @@ jobs:
           cdp_actions_api_token: ${{ secrets.CDP_ACTIONS_API_TOKEN }}
           cdp_server_api_url: ${{ vars.CDP_SERVER_API_URL }}
           deployment_batch_data: |
-            - artifactName: "test-action-artifact"
+            - artifactName: "s3://test1/applications/"
               artifactVersion: "1.0.0"
               componentName: "test-1-1"
               componentType: "yml"
               env:
                 - "development"
                 - "test"
-            - artifactName: "test-action-artifact"
+            - artifactName: "s3://test1/applications/"
               artifactVersion: "1.0.0"
               componentName: "test-2"
               componentType: "text"

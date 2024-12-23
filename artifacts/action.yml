@@ -38,7 +38,7 @@ runs:
 
     - name: Upload the Artifact Metadata using JavaScript
       run: |
-        node ./scripts/upload-artifact.js
+        node index.js
       shell: bash
       env:
         GITHUB_SHA: ${{ github.sha }}
