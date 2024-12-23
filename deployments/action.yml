@@ -26,7 +26,7 @@ runs:
 
     - name: Parse YAML and send deployment to API using JavaScript
       run: |
-        node deployments/index.js
+        node "$GITHUB_ACTION_PATH/deployments/index.js"
       shell: bash
       env:
         INPUT_DEPLOYMENT_BATCH_DATA: ${{ inputs.deployment_batch_data }}
