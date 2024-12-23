@@ -20,6 +20,7 @@ runs:
 
     - name: Initialize Node.js project and install dependencies
       run: |
+        cd $GITHUB_ACTION_PATH
         npm init -y
         npm install js-yaml
       shell: bash
